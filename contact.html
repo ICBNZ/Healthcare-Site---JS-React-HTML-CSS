@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Healthcare One - Contact</title>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://unpkg.com/react@15.5.4/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@15.5.4/dist/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.38/browser.js"></script>
+
+<!-- CSS stylesheet -->
+<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body id="indexbk" alt="Contact">
+  <header>
+    <!-- NAV -->
+    <div class="containernav">
+         <div id="logo">
+           <a href="about.html">
+           <img src="img/healthcarelogo.png" alt="Logo"></a>
+         </div>
+
+   </div>
+  </header>
+
+<!-- Main Buttons -->
+   <div class="btn-group">
+    <button class="button1">Payroll</button>
+    <button class="button1">Supervisor</button>
+   </div>
+
+<!-- Modal 1-->
+<section id="modal" class="container">
+  <!-- Close button -->
+    <span id="close" class="close">&times;</span>
+
+    <!-- Modal 1 Content -->
+    <h1>Contact Payroll</h1>
+    <form action="thankyou.html" method="post">
+        <label for="fname">First Name</label></br>
+        <input type="text" id="fname" name="firstname" placeholder="First Name" required></br>
+        <label for="lname">Last Name</label></br>
+        <input type="text" id="lname" name="lastname" placeholder="Last name" required></br>
+       </br><label for="email">Email</label></br>
+        <input type="email" id="email" name="email" placeholder="Email" required></br>
+        <label for="subject">Message</label></br>
+        <textarea id="subject" name="subject" placeholder="Your message.."required></textarea></br>
+        <input type="submit" value="Submit">
+    </form>
+
+
+ </section>
+
+ <section id="modal" class="container">
+   <!-- Close button -->
+     <span id="close" class="close">&times;</span>
+
+     <!-- Modal 1 Content -->
+     <h1>Contact Supervisor</h1>
+ <form action="thankyou.html" method="post">
+     <label for="fname">First Name</label></br>
+     <input type="text" id="fname" name="firstname" placeholder="First Name" required></br>
+     <label for="lname">Last Name</label></br>
+     <input type="text" id="lname" name="lastname" placeholder="Last name" required></br>
+    </br><label for="email">Email</label></br>
+     <input type="email" id="email" name="email" placeholder="Email" required></br>
+     <label for="subject">Message</label></br>
+     <textarea id="subject" name="subject" placeholder="Your message.."required></textarea></br>
+     <input type="submit" value="Submit">
+ </form>
+
+
+  </section>
+
+
+<!--    Footer  -->
+  <footer>
+    <div id="footer1">
+    <p>healthcareone@gmail.com</br>&copy; SmartSystems 2018</p>
+  </footer>
+<!-- JS link -->
+<script src="javascript.js"></script>
+</body>
+</html>
