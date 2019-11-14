@@ -1,124 +1,264 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Healthcare One</title>
-<meta charset="UTF-8">
+<title>Healthcare One - Employee</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- React, Babel, JQuery -->
   <script src="https://unpkg.com/react@15.5.4/dist/react.js"></script>
   <script src="https://unpkg.com/react-dom@15.5.4/dist/react-dom.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.38/browser.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 
 <!-- CSS stylesheet -->
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
-
-<body id="indexbk">
+<body >
   <header>
-    <div id="logo">
-      <a href="index.html">
-      <img src="img/healthcarelogo.png" alt="Logo"></a>
-    </div>
+    <div class="containernav">
 
-     <div class="navbutton">
-     <nav>
-       <ul>
-         <li><a href="contact.html">Contact</a></li>
-       </ul>
-     </nav>
- </div>
-</header>
-
-<!--Mobile Nav buttons -->
-       <div class="navbutton">
-        <a href="contact.html"><img id="icon" src="img/phone.png" alt="contact"></a>
+<!--Logo-->
+      <div id="logo">
+        <a href="login.html">
+        <img src="img/healthcarelogo.png" alt="Logo"></a>
+      </div>
+      <!-- Background Icon-->
+            <img class="button1" id="bkbtn" src="img/arrowsicon.png">
+      <!--Mobile Nav buttons -->
+             <div class="navbutton">
+               <div class="dropdown">
+                    <div class="dropbtn"><img src="img/navbutton.png" alt="Nav"></div>
+                       <div class="dropdown-content">
+                        <a href="payslips.html">Hours</a>
+                        <a href="contact.html">Contact</a>
+                       </div>
+                   </div>
+               </div>
+             <nav>
+               <ul>
+                 <li><a href="contact.html">Contact</a></li>
+               </ul>
+             </nav>
+         </div>
+    </header>
+    <!-- Main Buttons -->
+       <div class="btn-group">
+        <button class="button1">Clock In</button>
+        <button class="button1">Payslips</button>
        </div>
-   </div>
- </header>
-
-<!-- Main Buttons -->
-   <div class="btn-group">
-    <button class="button1">Login</button>
-    <button class="button1">New User</button>
-   </div>
-
-<!-- Modal 1-->
-
+<!-- Modal 1 - Customize Background-->
+  <section id="modal" class="container">
+     <!-- Close button -->
+      <span id="close" class="close" title="Close">&times;</span>
+      <!--    Modal 3 Content -->
+      <h3>Upload background image...<h3><br>
+      <br><input type='file' onchange="readURL(this);"/>
+  </section>
+<!-- Modal 2 - React -->
 <section id="modal" class="container">
-  <!-- Close button -->
-    <span id="close" class="close">&times;</span>
+   <!-- Close button -->
+    <span id="close" class="close" title="Close">&times;</span>
+     <!-- Render Container -->
+     <div id="timer"></div>
 
-    <!-- Modal 1 Content -->
-    <form id="loginform" action="employee.html" onsubmit="return validateForm()" method="post">
-        <label for="username"><b>Username</b></label><br>
-        <p><input id="username" type="text" name="username"><br></p>
-        <label for="password"><b>Password</b></label><br>
-        <p><input id="password" type="password" name="password"><br></p>
-        <button class="submit" type="submit">Login</button>
-    </form>
+     <!-- Start React Script -->
+     <script type="text/babel">
+     var destination = document.querySelector("#timer");
 
+/*    Constructor  - Timer *************************/
+class Timer extends React.Component {
+   constructor(props) {
+    super(props);
+    this.state = {
+      timerStarted: false,
+      timerStopped: true,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      day:0,
+      date:"",
+      showContent: false,
+      button1: "inline-block",
+      button2: "none",
+      button3: "none",
+      button4: "none",
+      captures: [],
+      shapes: []
+     }
+     this.toggleContent = this.toggleContent.bind(this)
+     this.componentDidMount = this.componentDidMount.bind(this);
+    }
+     // TOGGLE
+     toggleContent(e){
+      e.preventDefault();
+      this.setState({
+        showContent: !this.state.showContent
+      })
+    }
+    componentDidMount() {
+        var d = new Date();
+        var n = d.getDay();
+        this.setState({
+        day: n
+      });
+        var shiftdate = Date().toLocaleString()
+        var date1 = shiftdate.substr(0, 21)
+        this.setState({
+          date: date1
+        });
+    }
+
+// Clockin
+  handleClockin(e){
+        e.preventDefault();
+        if(this.state.timerStopped){
+            this.timer = setInterval(() => {
+          this.setState({timerStarted: true, timerStopped: false});
+        if (this.state.timerStarted){
+            this.setState({
+              button1: "none"
+            });
+            this.setState({
+              button2: "inline-block"
+            });
+            this.setState({
+              button4: "none"
+            });
+            if(this.state.seconds >= 60){
+              this.setState((prevState) => ({minutes: prevState.minutes +1, seconds: 0}));
+            }
+            if (this.state.mintues >= 60){
+              this.setState((prevState) => ({hours: prevState.hours +1, minutes:0, seconds: 0}));
+            }
+            this.setState((prevState) => ({seconds: prevState.seconds +1}));
+        }
+           }, 1000);
+          }
+         }
+// Clockout
+       handleClockout(e){
+       e.preventDefault();
+        this.setState({timerStarted: false, timerStopped: true});
+        this.setState({
+          button2: "none"
+        });
+        this.setState({
+          button3: "inline-block"
+        });
+        clearInterval(this.timer);
+       }
+// Capture Times
+       handleCapture() {
+       this.setState(prevState => ({
+        captures: [
+          ...prevState.captures,
+          this.state.date + "\n" + this.state.hours + ":" + this.state.minutes + ":" + this.state.seconds + "\n"]
+       }));
+      this.setState(prevState => ({
+        shapes: [
+          ...prevState.shapes,
+         this.state.day + " \n " + this.state.minutes]
+       }));
+       this.setState({
+         button3: "none"
+      });
+       this.setState({
+         button4: "inline-block"
+       });
+       }
+//     Reset
+      handleTimerReset(e){
+        this.setState({
+          button1: "inline-block"});
+        this.setState({
+          button2: "none"});
+        this.setState({
+          button3: "none"});
+        this.setState({
+          button4: "none"
+        });
+       this.setState({timerStarted: false, timerStopped: true, seconds: 0, minutes: 0, hours: 0});
+       clearInterval(this.timer);
+      }
+// Render  **************************************
+ render() {
+// Toggle  ******
+         const {showContent} = this.state
+// Button  ******
+         var btn1 = {
+           display: this.state.button1};
+         var btn2 = {
+           display: this.state.button2};
+         var btn3 = {
+           display: this.state.button3};
+         var btn4 = {
+           display: this.state.button4};
+// Shape ******
+         //  Test shape state change with seconds
+         var sheight =(((this.state.seconds * 60) + this.state.seconds)/1440)*100
+      //  var sheight =(((this.state.hours * 60) + this.state.minutes)/1440)*100
+  // RETURN  **************************************
+return (
+      <div className="container2">
+      <h1>Clock In </h1>
+      <div className="current-timer">
+        {"\n" + this.state.hours + ":" + this.state.minutes + ":" + this.state.seconds + "\n"}
+      </div>
+         {/* BUTTONS */}
+      <div className="btn-group2">
+        <button style={btn1} onClick={this.handleClockin.bind(this)}>Start Shift</button>
+        <button style={btn2} onClick={this.handleClockout.bind(this)}>Clock Out</button>
+        <button style={btn4} onClick={this.handleTimerReset.bind(this)}>New</button>
+        <button style={btn3} onClick={this.handleCapture.bind(this)}>Total</button>
+          <div style={btn4} onClick={this.toggleContent} className="timer-capture">
+          { this.state.captures.map((time, index) => {
+             return <code>{"\n Shift " + ( index + 1 ) + " : " + time + ('\n')}</code>
+          })} </div>
+       {/* Hours Button Toggled
+       <button onClick={this.toggleContent}>Hours</button>
+          {showContent === true ? <Shape height={sheight}/> : ""}
+        */}
+     </div>
+     {/* shapes states
+     { this.state.shapes.map((time, index) => {
+        return <code>{ (index +1) + time }</code>
+     })}*/}
+  </div>
+  );
+}
+}
+ //    DOM render  **************************************
+  ReactDOM.render(
+      <div>
+      <Timer/>
+      </div>,
+      destination
+    );
+    </script>
+    <section class="iconsemp">
+     <a href="contact.html"><img id="emicons" src="img/phone.png" alt="contact"></a>
+     <a href="payslips.html"><img id="emicons" src="img/ammendicon.png"alt="hours"></a>
+     <a href="payslips.html"> <img id="emicons" src="img/verifyicon.png"alt="verify"></a>
+    </section>
 </section>
 <!-- Modal 2 -->
   <section id="modal" class="container">
     <!-- Close button -->
     <span id="close" class="close">&times;</span>
-   <!-- Modal 2 Content - New User Form -->
-   <form id="newuser1" action="thankyou.html" onsubmit="return checkForm()" method="post"></label>
-     <div>
-    <label for="firstname">First Name</label>
-    <input id="firstname" type="text" name="firstname"/>
-    <span id="firstname_msg"></span>
-    </div>
-    <div>
-    <label for="lastname">Last Name</label>
-    <input id="lastname" type="text" name="lastname"/>
-    <span id="lastname_msg"></span>
-    </div>
-    <div>
-    <label for="email">Email</label></br>
-    <input id="email" type="email" name="email"/>
-    <span id="email_msg"></span></br>
-    </div>
-     <label for="region">Region</label><br>
-     <select id="region" name="region" required>
-       <option value="-1">--Choose--</option>
-       <optgroup label="New Zealand">
-         <option value="nrthlnd">Northland</option>
-         <option value="akl">Auckland</option>
-         <option value="waikato">Waikato</option>
-         <option value="bop">Bay of Plenty</option>
-         <option value="gis">Gisborne</option>
-         <option value="hb">Hawkes Bay</option>
-         <option value="wgtn">Taranaki</option>
-         <option value="wgtn">Manawatu</option>
-         <option value="wgtn">Wellington</option>
-       </optgroup>
-     </select>
-     <span id="region_msg"></span>
-     <br>
-     <button class="submit" type="submit">Submit</button>
-     <br>
-   </form>
- </section>
-
-
-<!-- Modal 3 -->
-<section id="modal" class="container">
-   <!-- Close button -->
-    <span id="close" class="close" title="Close">&times;</span>
-    <!--    Modal 3 Content - REACT  -->
-     <div id="clockin"></div>
-    <script type="text/babel"></script>
-    <!-- var destination = document.querySelector("#clockin"); -->
-<!--    Constructor  -->
-
-</section>
-
-<!--    Footer  -->
-  <footer>
-    <div id="footer1">
-    <p>healthcareone@gmail.com</br>&copy; SmartSystems 2018</p>
-  </footer>
-<!-- JS link -->
+      <h1> PAYSLIPS </h1>
+       <section class="iconsemp">
+        <a href="contact.html"><img id="emicons" src="img/phone.png" alt="contact"></a>
+        <a href="payslips.html"><img id="emicons" src="img/ammendicon.png"alt="hours"></a>
+        <a href="payslips.html"> <img id="emicons" src="img/verifyicon.png"alt="verify"></a>
+       </section>
+  </section>
+<!-- Footer -->
+<footer>
+  <div id="footer1">
+  <p>healthcareone@gmail.com</br>&copy; SmartSystems 2018</p>
+</footer>
+<!-- JS file -->
 <script src="javascript.js"></script>
 </body>
 </html>
